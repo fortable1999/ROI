@@ -1,3 +1,4 @@
+import json
 from flask import Flask
 from flask import request
 from flask import render_template
@@ -103,4 +104,11 @@ def index():
         print(params.items())
         params = dict([(k, float(v[0])) for (k, v) in params.items()])
         data = simulation(**params)
-    return render_template('index.html', data=data)
+        return render_template('index.html', data=json.dumps(data['simulation']), params=data['params'])
+    else :
+        data = []
+        params = dict(selling_price_rate=1.0, building_price_rate=0.3, running_cost_rate=0.15,
+                      income_decreate_rate=0.01, buy_fee_rate=0.06, sell_fee_rate=0.03, 
+                      loan_break_fee_rate=0.015, running_tax_rate=0.37, selling_tax_rate=0.37)
+        return render_template('index.html', data=data, params=params)
+        

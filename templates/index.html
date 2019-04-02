@@ -1,14 +1,71 @@
-<p>
-hello
-{{ data }}
-  <form action="" method="post">
-     <p>ROA <input type="number" name="roa" step=0.001 /></p>
-     <p>PRICE <input type="number" name="price" /></p>
-     <p>EQUITY RATE <input type="number" name="equity_rate" step=0.001 /></p>
-     <p>DURABLE <input type="number" name="durable" /></p>
-     <p>AGE <input type="number" name="age" /></p>
-     <p>INTEREST RATE <input type="number" name="interest_rate"  step=0.001 /></p>
-     <p>LOAD MONTHS <input type="number" name="loan_months" /></p>
-     <p><input type = "submit" value="submit" /></p>
-  </form>
-</p>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>不動産投資CF　NAVシミュレーション</title>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		
+	</head>
+
+	<body>
+		<p>
+			<h3>
+				不動産投資CF　NAVシミュレーション
+			</h3>
+			<form action="" method="post">
+				<p>表面利回り <input type="number" name="roa" step=0.001 value={{ params.roa }} /></p>
+				 <p>物件価格 <input type="number" name="price" value={{ params.price }} /></p>
+				 <p>自己資金比例 <input type="number" name="equity_rate" step=0.001 value={{ params.equity_rate }} /></p>
+				 <p>耐用年数 <input type="number" name="durable" value={{ params.durable }} /></p>
+				 <p>築年数 <input type="number" name="age" value={{ params.age }} /></p>
+				 <p>金利<input type="number" name="interest_rate"  step=0.001 value={{ params.interest_rate }} /></p>
+				 <p>ローン年数<input type="number" name="loan_months" value={{ params.loan_months }} /></p>
+				 <p>売却価格倍率<input type="number" name="selling_price_rate" step=0.01 value={{ params.selling_price_rate }} /></p>
+				 <p>建築価格比例<input type="number" name="building_price_rate" step=0.001 value={{ params.building_price_rate }} /></p>
+				 <p>運用コスト比例<input type="number" name="running_cost_rate" step=0.001 value={{ params.running_cost_rate }} /></p>
+				 <p>家賃下落率<input type="number" name="income_decreate_rate" step=0.001 value={{ params.income_decreate_rate }} /></p>
+				 <p>購入費用比例<input type="number" name="buy_fee_rate" step=0.001 value={{ params.buy_fee_rate }} /></p>
+				 <p>売却費用比例<input type="number" name="sell_fee_rate" step=0.001 value={{ params.sell_fee_rate }} /></p>
+				 <p>ローン繰上返済費用比例<input type="number" name="loan_break_fee_rate" step=0.001 value={{ params.loan_break_fee_rate }} /></p>
+				 <p>所得税率<input type="number" name="running_tax_rate" step=0.001 value={{ params.running_tax_rate }} /></p>
+				 <p>譲渡所得税率<input type="number" name="selling_tax_rate" step=0.001 value={{ params.selling_tax_rate }} /></p>
+
+				 <p><input type = "submit" value="シミュレーション" /></p>
+			</form>
+		</p>
+		<div id="myDiv"></div>
+		<div id=""></div>
+
+		<script>
+			var d = {{ data|safe }};
+      
+			var trace1 = {
+        x: d.map((x) => x['index']),
+        y: d.map((x) => x['cf_taxed']),
+				name: '課税キャッシュフロー',
+				type: 'bar',
+			};
+
+			var trace2 = {
+        x: d.map((x) => x['index']),
+        y: d.map((x) => x['nav']),
+				name: '解散資産',
+				type: 'bar',
+			};
+
+	    var data = [trace1, trace2];
+
+var layout = {
+	  title: '2013 Sales Report',
+  xaxis: {
+    tickangle: -45
+  },
+  barmode: 'group'
+};
+
+      Plotly.newPlot('myDiv', data, layout);
+
+		</script>
+		
+	</body>
+
+</html>
